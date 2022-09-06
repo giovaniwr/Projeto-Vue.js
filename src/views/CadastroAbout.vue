@@ -1,12 +1,12 @@
 <template>
-    <div id="employee-form">
+    <div classe="CadastroHome" id="cadastro-form">
         <form @submit.prevent="handleSubmit">
             <label>Nome:</label>
             <input 
                 ref="first"
                 type="text"
                 :class="{ 'has-error': submitting && isNomeValid }"
-                v-model="employee.nome"
+                v-model="cadastro.nome"
                 @focus="clearStatus"
                 @keypress="clearStatus" 
             />
@@ -14,21 +14,21 @@
             <input 
                 type="text"
                 :class="{ 'has-error': submitting && isCpfValid }"
-                v-model="employee.cpf"
+                v-model="cadastro.cpf"
                 @focus="clearStatus"
             />
             <label>Telefone</label>
             <input 
                 type="text"
                 :class="{ 'has-error': submitting && isTelefoneValid }"
-                v-model="employee.telefone"
+                v-model="cadastro.telefone"
                 @focus="clearStatus"
             />
             <label>Email</label>
             <input 
                 type="text"
                 :class="{ 'has-error': submitting && isEmailValid }"
-                v-model="employee.email"
+                v-model="cadastro.email"
                 @focus="clearStatus"
             />
             <p v-if="error && submitting" class="error-message">
@@ -44,18 +44,18 @@
 
 <script>
 export default {
-    nome: 'employee-form',
+    nome: 'cadastro-form',
     data() {
         return{
             submitting: false,
             error: false,
             success: false,
-            employee: {
+            cadastro: {
                 nome: '',
                 cpf: '',
                 telefone: '',
                 email: '',
-                cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
+                // cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
                 telReg: /^1\d\d(\d\d)?$|^0800 ?\d{3} ?\d{4}$|^(\(0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d\) ?|0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d[ .-]?)?(9|9[ .-])?[2-9]\d{3}[ .-]?\d{4}$/,
                 emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
             },
@@ -71,14 +71,14 @@ export default {
                 return
             }
 
-            this.$emit('add:employee', this.employee)
+            this.$emit('add:cadastro', this.cadastro)
             this.$refs.first.focus()
-            this.employee = {
+            this.cadastro = {
                 nome: '',
                 cpf: '',
                 telefone: '',
                 email: '',
-                cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
+                // cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
                 telReg: /^1\d\d(\d\d)?$|^0800 ?\d{3} ?\d{4}$|^(\(0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d\) ?|0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d[ .-]?)?(9|9[ .-])?[2-9]\d{3}[ .-]?\d{4}$/,
                 emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
             }
@@ -94,16 +94,16 @@ export default {
     },
     computed: {
         isNomeValid() {
-            return this.employee.nome === '';
+            return this.cadastro.nome === '';
         },
         isCpfValid() {
-            return (this.employee.cpf === '') ? true : (this.employee.cpfReg.test(this.employee.cpf)) ? false : true;
+            return (this.cadastro.cpf === '') ? true : (this.cadastro.cpfReg.test(this.cadastro.cpf)) ? false : true;
         },
         isTelefoneValid() {
-            return this.employee.telefone === ''? true : (this.employee.telReg.test(this.employee.telefone)) ? false : true;
+            return this.cadastro.telefone === ''? true : (this.cadastro.telReg.test(this.cadastro.telefone)) ? false : true;
         },
         isEmailValid () {
-            return (this.employee.email === '') ? true : (this.employee.emailReg.test(this.employee.email)) ? false : true;
+            return (this.cadastro.email === '') ? true : (this.cadastro.emailReg.test(this.cadastro.email)) ? false : true;
         }
     },
 }
