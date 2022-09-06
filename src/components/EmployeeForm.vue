@@ -1,16 +1,30 @@
 <template>
     <div id="employee-form">
         <form @submit.prevent="handleSubmit">
-            <label>Employee Name</label>
+            <label>Nome:</label>
             <input 
                 ref="first"
                 type="text"
-                :class="{ 'has-error': submitting && isNameValid }"
-                v-model="employee.name"
+                :class="{ 'has-error': submitting && isNomeValid }"
+                v-model="employee.nome"
                 @focus="clearStatus"
                 @keypress="clearStatus" 
             />
-            <label>Employee Email</label>
+            <label>CPF:</label>
+            <input 
+                type="text"
+                :class="{ 'has-error': submitting && isCpfValid }"
+                v-model="employee.cpf"
+                @focus="clearStatus"
+            />
+            <label>Telefone</label>
+            <input 
+                type="text"
+                :class="{ 'has-error': submitting && isTelefoneValid }"
+                v-model="employee.telefone"
+                @focus="clearStatus"
+            />
+            <label>Email</label>
             <input 
                 type="text"
                 :class="{ 'has-error': submitting && isEmailValid }"
@@ -18,28 +32,32 @@
                 @focus="clearStatus"
             />
             <p v-if="error && submitting" class="error-message">
-                ❗Please fill out all required fields and valid email address
+                ❗Por Favor Preencha Corretamente os Campos
             </p>
             <p v-if="success" class="success-message">
-                ✅ Employee successfully added
+                ✅ Cadastro Adicionado Com Sucesso!!!
             </p>
-            <button>Add Employee</button>
+            <button variant="primary">Salvar</button>
         </form>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'employee-form',
+    nome: 'employee-form',
     data() {
         return{
             submitting: false,
             error: false,
             success: false,
             employee: {
-                name: '',
+                nome: '',
+                cpf: '',
+                telefone: '',
                 email: '',
-                reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
+                cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
+                telReg: /^1\d\d(\d\d)?$|^0800 ?\d{3} ?\d{4}$|^(\(0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d\) ?|0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d[ .-]?)?(9|9[ .-])?[2-9]\d{3}[ .-]?\d{4}$/,
+                emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
             },
         }
     },
@@ -48,7 +66,7 @@ export default {
             this.submitting = true
             this.clearStatus()
 
-            if(this.isNameValid || this.isEmailValid){
+            if(this.isNomeValid || this.isCpfValid ||this.isTelefoneValid || this.isEmailValid ){
                 this.error = true
                 return
             }
@@ -56,9 +74,13 @@ export default {
             this.$emit('add:employee', this.employee)
             this.$refs.first.focus()
             this.employee = {
-                name: '',
+                nome: '',
+                cpf: '',
+                telefone: '',
                 email: '',
-                reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
+                cpfReg: /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
+                telReg: /^1\d\d(\d\d)?$|^0800 ?\d{3} ?\d{4}$|^(\(0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d\) ?|0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d[ .-]?)?(9|9[ .-])?[2-9]\d{3}[ .-]?\d{4}$/,
+                emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
             }
             this.error = false
             this.success = true
@@ -71,11 +93,17 @@ export default {
         },
     },
     computed: {
-        isNameValid() {
-            return this.employee.name === '';
+        isNomeValid() {
+            return this.employee.nome === '';
+        },
+        isCpfValid() {
+            return (this.employee.cpf === '') ? true : (this.employee.cpfReg.test(this.employee.cpf)) ? false : true;
+        },
+        isTelefoneValid() {
+            return this.employee.telefone === ''? true : (this.employee.telReg.test(this.employee.telefone)) ? false : true;
         },
         isEmailValid () {
-            return (this.employee.email === '') ? true : (this.employee.reg.test(this.employee.email)) ? false : true;
+            return (this.employee.email === '') ? true : (this.employee.emailReg.test(this.employee.email)) ? false : true;
         }
     },
 }

@@ -6,17 +6,29 @@
     <table v-else>
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Telefone</th>
           <th>Email</th>
-          <th>Actions</th>
+          <th>Ação</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="employee in employees" v-bind:key="employee.id">
           <td v-if="editing === employee.id">
-            <input type="text" v-model="employee.name" />
+            <input type="text" v-model="employee.nome" />
           </td>
-          <td v-else>{{ employee.name }}</td>
+          <td v-else>{{ employee.nome }}</td>
+
+          <td v-if="editing === employee.id">
+            <input type="text" v-model="employee.cpf" />
+          </td>
+          <td v-else>{{ employee.cpf }}</td>
+
+          <td v-if="editing === employee.id">
+            <input type="text" v-model="employee.telefone" />
+          </td>
+          <td v-else>{{ employee.telefone }}</td>
 
           <td v-if="editing === employee.id">
             <input type="text" v-model="employee.email" />
@@ -41,7 +53,7 @@
 
 <script>
   export default {
-    name: 'employee-details',
+    nome: 'employee-details',
     props: {
       employees: Array,
     },
@@ -64,7 +76,7 @@
       },
 
       editEmployee(employee){
-        if(employee.name === '' || employee.email === '') return
+        if(employee.nome === '' || employee.cpf === '' || employee.telefone === '' || employee.email === '') return
         this.$emit('edit:employee', employee.id, employee)
         this.editing = null        
       },

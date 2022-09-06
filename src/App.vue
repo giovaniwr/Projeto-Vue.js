@@ -18,7 +18,7 @@ import EmployeeDetails from './components/EmployeeDetails.vue'
 
 
 export default {
-  name: 'app',
+  nome: 'app',
   components: {
     EmployeeDetails,
     EmployeeForm,
@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     async addEmployee(employee) {
-      try {
         const response = await fetch('https://jsonplaceholder.typicode.com/users', {
           method: 'POST',
           body: JSON.stringify(employee),
@@ -38,23 +37,16 @@ export default {
         });
         const data = await response.json()
         this.employees = [...this.employees, data]
-      } catch (error) {
-        console.error('Error occured while adding employee: ' +error)
-      }
+    
     },
 
     async getEmployees() {
-      try {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users`)
+         const response = await fetch(`https://jsonplaceholder.typicode.com/users`)
         const data = await response.json()
         this.employees = data
-      } catch (error) {
-        console.error('Error occured while retrieving employees: ' +error);
-      }
     },
 
     async editEmployee(id, updatedEmployee) {
-      try {
         const response = await fetch (`https://jsonplaceholder.typicode.com/users/${id}`, {
           method: 'PUT',
           body: JSON.stringify(updatedEmployee),
@@ -63,21 +55,14 @@ export default {
 
         const data = await response.json()
         this.employees = this.employees.map(employee => (employee.id === id ? data : employee))
-
-      } catch (error) {
-        console.error('Error while editing: ', +error)
-      }
     },
 
     async deleteEmployee(id) {
-      try {
+     
         await fetch (`https://jsonplaceholder.typicode.com/users/${id}`, {
           method: 'DELETE'
         });
         this.employees = this.employees.filter(employee => employee.id !== id);
-      } catch (error) {
-        console.error('Error while deleting: ', +error)
-      }
     },
   },
   mounted() {
